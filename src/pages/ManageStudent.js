@@ -1,23 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Table, Modal, Pagination } from 'antd';
+import { Table, Modal, Pagination, Popconfirm } from 'antd';
 import ModelCreate from '../components/ModelCreate';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetListStudentAction } from '../redux/Action/ManageStudentAction';
-import { BsPencilSquare } from 'react-icons/bs';
+import { DeleteStudentAction, GetListStudentAction } from '../redux/Action/ManageStudentAction';
+import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { history } from '../App';
 import { _home, _student } from '../utils/Settings/configPath';
 
 export default function ManageStudent() {
-
     const dispatch = useDispatch();
 
     const { lstStudent } = useSelector(state => state.ManageStudentReducer);
-    // console.log('first', lstStudent)
-
-    const onChange = (page, pageSize) => {
-        dispatch(GetListStudentAction(page - 1))
-        history.replace(`${_home}/${page}`)
-    }
 
     useEffect(() => {
         dispatch(GetListStudentAction(0))
@@ -37,6 +30,9 @@ export default function ManageStudent() {
         setIsModalOpen(false);
     };
 
+    const cancel = (e) => {
+        console.log(e);
+    };
 
 
     const columns = [
@@ -76,6 +72,17 @@ export default function ManageStudent() {
                     }}>
                         <BsPencilSquare style={{ fontSize: 25 }} />
                     </button>
+                    {/* <button className='mx-4 text-red-500 hover:text-red-900' title='Xóa' >
+                        <Popconfirm
+                            title="Bạn có muốn xóa không?"
+                            onConfirm={() => { dispatch(DeleteStudentAction(item.id)) }}
+                            onCancel={cancel}
+                            okText="Có"
+                            cancelText="Không"
+                        >
+                            <BsFillTrashFill style={{ fontSize: 25 }} />
+                        </Popconfirm>
+                    </button> */}
                 </div>
             },
         },
@@ -93,10 +100,18 @@ export default function ManageStudent() {
                 <ModelCreate onCancel={handleCancel} onOk={handleOk} />
             </Modal>
             <div className='my-8'>
-                <Table dataSource={lstStudent.data} columns={columns} key='' pagination={false} />;
-                <div className='text-end'>
-                    <Pagination defaultCurrent={1} total={lstStudent.total_count} onChange={onChange} />
-                </div>
+                <Table
+                    dataSource={lstStudent.data}
+                    columns={columns}
+                    key=''
+                    pagination={{
+                        total: `${lstStudent.total_count}`,
+                        onChange: (page, pageSize) => {
+                            dispatch(GetListStudentAction(page - 1))
+                            history.replace(`${_home}/${page}`)
+                        }
+                    }} />;
+
             </div>
         </div>
     )
