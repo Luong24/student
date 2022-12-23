@@ -12,10 +12,11 @@ export default function ManageStudent() {
     const dispatch = useDispatch();
 
     const { lstStudent } = useSelector(state => state.ManageStudentReducer);
+    // console.log('first', lstStudent)
 
     const onChange = (page, pageSize) => {
         dispatch(GetListStudentAction(page - 1))
-        history.push(`${_home}/${page}`)
+        history.replace(`${_home}/${page}`)
     }
 
     useEffect(() => {
@@ -67,6 +68,7 @@ export default function ManageStudent() {
         {
             title: '',
             dataIndex: 'id',
+            key: 'id',
             render: (text, item) => {
                 return <div className='flex'>
                     <button className='mx-4 text-green-500 hover:text-green-900' title='Sửa' onClick={() => {

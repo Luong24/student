@@ -146,7 +146,7 @@ export default function EditStudent(props) {
                         </div>
                         <div className='text-end mt-16'>
                             <button type='button' onClick={() => {
-                                history.push(`${_home}/1`)
+                                history.replace(`${_home}/1`)
                             }} className='border rounded w-24 h-10 text-lg font-medium' >Đóng</button>
                             <button type='button' className='mx-4 border rounded w-24 h-10 text-lg font-medium hover:text-white hover:bg-red-500' >
                                 <Popconfirm
