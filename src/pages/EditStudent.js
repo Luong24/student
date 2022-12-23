@@ -21,7 +21,6 @@ export default function EditStudent(props) {
 
     const onChangeDate = (date) => {
         let birthDay = moment(date);
-        console.log('first', birthDay)
         formik.setFieldValue('birthday', birthDay)
     };
     const [value, setValue] = useState();
@@ -147,6 +146,7 @@ export default function EditStudent(props) {
                         <div className='text-end mt-16'>
                             <button type='button' onClick={() => {
                                 history.replace(`${_home}/1`)
+                                // history.goBack()
                             }} className='border rounded w-24 h-10 text-lg font-medium' >Đóng</button>
                             <button type='button' className='mx-4 border rounded w-24 h-10 text-lg font-medium hover:text-white hover:bg-red-500' >
                                 <Popconfirm

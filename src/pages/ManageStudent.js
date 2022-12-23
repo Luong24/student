@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Table, Modal, Pagination, Popconfirm } from 'antd';
+import { Table, Modal, Popconfirm } from 'antd';
 import ModelCreate from '../components/ModelCreate';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteStudentAction, GetListStudentAction } from '../redux/Action/ManageStudentAction';
@@ -7,13 +7,20 @@ import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { history } from '../App';
 import { _home, _student } from '../utils/Settings/configPath';
 
-export default function ManageStudent() {
+export default function ManageStudent(props) {
+    let { id } = props.match.params;
+
+    const [index, setIndex] = useState();
+    useEffect(() => {
+        setIndex(id)
+    }, [id])
+
     const dispatch = useDispatch();
 
     const { lstStudent } = useSelector(state => state.ManageStudentReducer);
 
     useEffect(() => {
-        dispatch(GetListStudentAction(0))
+        dispatch(GetListStudentAction(id - 1))
     }, [])
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,6 +40,8 @@ export default function ManageStudent() {
     const cancel = (e) => {
         console.log(e);
     };
+
+
 
 
     const columns = [
@@ -105,6 +114,7 @@ export default function ManageStudent() {
                     columns={columns}
                     key=''
                     pagination={{
+                        defaultCurrent: index,
                         total: `${lstStudent.total_count}`,
                         onChange: (page, pageSize) => {
                             dispatch(GetListStudentAction(page - 1))
