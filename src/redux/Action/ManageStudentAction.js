@@ -1,5 +1,6 @@
 
 import { history } from '../../App';
+import { _home } from '../../utils/Settings/configPath';
 import { manageStudentService } from './../../services/ManageStudent';
 import { message } from 'antd';
 
@@ -22,14 +23,14 @@ export const AddPStudentAction = (dataStudent) => {
 }
 
 
-export const GetListStudentAction = () => {
+export const GetListStudentAction = (page) => {
     return async dispatch => {
         try {
-            const result = await manageStudentService.getList();
+            const result = await manageStudentService.getList(page);
             if (result.status === 200) {
                 dispatch({
                     type: 'GET_LIST',
-                    dataStudent: result.data.data
+                    dataStudent: result.data
                 })
             }
             else {
@@ -68,7 +69,7 @@ export const UpdateStudentAction = (id, data) => {
             const result = await manageStudentService.updateStudent(id, data);
             if (result.status === 200) {
                 await message.success("Cập nhật thành công!")
-                history.push('/')
+                history.push(`${_home}/1`)
             }
             else {
                 message.error("Cập nhật thất bại!")
@@ -88,7 +89,7 @@ export const DeleteStudentAction = (id) => {
             const result = await manageStudentService.delStudent(id);
             if (result.status === 200) {
                 message.success('Xóa thành công!')
-                history.push(`/`)
+                history.push(`${_home}/1`)
                 dispatch(GetListStudentAction())
             }
             else {

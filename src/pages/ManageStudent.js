@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Table, Modal } from 'antd';
+import { Table, Modal, Pagination } from 'antd';
 import ModelCreate from '../components/ModelCreate';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetListStudentAction } from '../redux/Action/ManageStudentAction';
 import { BsPencilSquare } from 'react-icons/bs';
 import { history } from '../App';
-import { _student } from '../utils/Settings/configPath';
+import { _home, _student } from '../utils/Settings/configPath';
 
 export default function ManageStudent() {
 
@@ -13,8 +13,13 @@ export default function ManageStudent() {
 
     const { lstStudent } = useSelector(state => state.ManageStudentReducer);
 
+    const onChange = (page, pageSize) => {
+        dispatch(GetListStudentAction(page - 1))
+        history.push(`${_home}/${page}`)
+    }
+
     useEffect(() => {
-        dispatch(GetListStudentAction())
+        dispatch(GetListStudentAction(0))
     }, [])
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +35,7 @@ export default function ManageStudent() {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
 
 
     const columns = [
@@ -85,7 +91,10 @@ export default function ManageStudent() {
                 <ModelCreate onCancel={handleCancel} onOk={handleOk} />
             </Modal>
             <div className='my-8'>
-                <Table dataSource={lstStudent} columns={columns} key='' />;
+                <Table dataSource={lstStudent.data} columns={columns} key='' pagination={false} />;
+                <div className='text-end'>
+                    <Pagination defaultCurrent={1} total={lstStudent.total_count} onChange={onChange} />
+                </div>
             </div>
         </div>
     )

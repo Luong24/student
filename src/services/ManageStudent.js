@@ -14,8 +14,8 @@ class ManageStudentService extends baseService {
         return this.post(`employee`, dataStudent)
     }
 
-    getList = () => {
-        return this.get(`employee?page=0&size=15`)
+    getList = (page) => {
+        return this.get(`employee?page=${page}&size=5`)
     }
 
     getDetail = (id) => {
